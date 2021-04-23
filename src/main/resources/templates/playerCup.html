@@ -1,0 +1,91 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<title th:text="#{playerProfile} + ' ' + ${player.firstName + ' ' + player.lastName} + ' | ' + #{team} + ' ' + ${player.team.teamName }"></title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/hamburger.css">
+    <link rel="shortcut icon" href="/img/footgo-dark-icon.png" type="image/x-icon">
+	<script src="/imgPlaceholderSetScript.js" type="text/javascript"></script>
+</head>
+<body class="matches-full">
+<header th:replace="fragments/header :: header"></header>
+<div class="main-head main-head-results player-background">
+	<div class="main-head-title league-page">
+		<h1 th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${cup.nameEn}"></h1>
+		<h1 th:if="${#locale.language == 'uk'}" th:text="${cup.name}"></h1>
+	</div>
+</div>
+<div class="main-block">
+	<div th:replace="fragments/carousel :: carousel"></div>
+</div>
+<div id="bredcrumbs" class="section">
+	<div class="row">
+		<nav>
+			<div class="nav-wrapper">
+				<div class="col">
+					<a th:text="#{home}" href="/" class="breadcrumb"></a>
+					<a th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${cup.nameEn}" th:href="'/' + ${seasonId} + '/cup/' + ${cup.id}" class="breadcrumb"></a>
+					<a th:if="${#locale.language == 'uk'}" th:text="${cup.name}" th:href="'/' + ${seasonId} + '/cup/' + ${cup.id}" class="breadcrumb"></a>
+					<a th:text="#{player}" href="#!" class="breadcrumb"></a>
+				</div>
+			</div>
+		</nav>
+	</div>
+</div>
+<div class="player-card-main">
+	<div class="player-card-photo">
+		<img th:if="${!#strings.isEmpty(player.getImageUrl())}" th:attr="src=${player.getImageUrl()}">
+		<img th:if="${player.getImageUrl() == null || player.getImageUrl() == ''}" src="/img/img_avatar.png">
+	</div>
+	<div class="player-card-info">
+		<p th:if="${#locale.language == 'uk'}" th:text="${player.lastName + ' ' + player.firstName}"></p>
+		<p th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${playerLastNameTransliterated + ' ' + playerFirstNameTransliterated}"></p>
+		<!--<p>Дата народження</p>-->
+		<!--<p>01.01.1900</p>-->
+		<p th:text="#{team} + ':'"></p>
+		<div class="player-card-logo-team">
+			<a th:attr="href=${'/' + seasonId + '/cup/' + cupId + '/team/' + player.team.id}">
+				<img th:attr="src=${player.team.logoImageUrl}, class=${'light' + ' ' + 'team' + player.team.id}">
+				<img th:attr="src=${player.team.logoImageUrlDark}, class=${'dark' + ' ' + 'team' + player.team.id}">
+				<p th:if="${#locale.language == 'uk'}" th:text="${player.team.teamName}"></p>
+				<p th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${teamNameTransliterated}"></p>
+			</a>
+		</div>
+		<!--<p>Забито голів:<span>15</span></p>-->
+		<!--<div class="player-card-logo-team-score">-->
+			<!--<a th:attr="href=${'/team/' + player.team.id}">-->
+				<!--<img th:attr="src=${'/logo/logo' + player.team.id + '.png'}">-->
+				<!--<p th:text="${player.team.teamName}"></p>-->
+			<!--</a>-->
+			<!--<p>3 голи</p>-->
+		<!--</div>-->
+	</div>
+</div>
+<div class="player-container">
+	<div class="sponsor-bg">
+		<div class="match-video video-description sponsor-description"
+			 th:if="${player.descriptionText != null} AND ${player.descriptionText != ''} AND ${player.descriptionText != ' '}">
+			<div class="results-container description-text">
+				<div class="ck-table" th:utext="${player.descriptionText}"></div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="/signUpScript.js"></script>
+<script src="/hamburger.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-39722519-3"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-39722519-3');
+</script>
+</body>
+</html>

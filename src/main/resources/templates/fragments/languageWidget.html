@@ -1,0 +1,17 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+</head>
+<body>
+<div th:fragment="languageWidget" class="header-second-block">
+    <div class="lang-switcher">
+        <button th:text="${#locale.language}" class="dropbtn"></button>
+        <div class="lang-list">
+            <a href="?lang=en">English</a>
+            <a th:if="${#locale.language == 'uk'}" href="?lang=uk">Українська</a>
+            <a th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" href="?lang=uk">Ukrainian</a>
+        </div>
+    </div>
+</div>
+</body>
+</html>

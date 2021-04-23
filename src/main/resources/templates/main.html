@@ -1,0 +1,239 @@
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width">
+    <title th:if="${!#lists.isEmpty(tournament)} AND ${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${tournament.nameEn} + ' - ' + #{title}"></title>
+    <title th:if="${!#lists.isEmpty(tournament)} AND ${#locale.language == 'uk'}" th:text="${tournament.name} + ' - ' + #{title}"></title>
+    <title th:if="${#lists.isEmpty(tournament)}" th:text="#{title}"></title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="shortcut icon" th:href="@{/img/footgo-dark-icon.png}" type="image/x-icon">
+    <link rel="stylesheet" th:href="@{/style.css}">
+    <link rel="stylesheet" th:href="@{/hamburger.css}">
+    <link href="https://fonts.googleapis.com/css?family=Gugi" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css?family=Roboto&display=swap" rel="stylesheet">
+</head>
+<body class="main-photo">
+<header th:replace="fragments/header :: header"></header>
+<div class="main-head">
+    <div class="main-head-title">
+        <div class="main-head-logo" alt="wiselogo"></div>
+        <h1 th:text="#{mainHeaderTitle}"></h1>
+        <h1 th:if="${not #lists.isEmpty(season)} AND ${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${season.nameEn}"></h1>
+        <h1 th:if="${not #lists.isEmpty(season)} AND ${#locale.language == 'uk'}" th:text="${season.name}"></h1>
+        <div class="button-container">
+            <div th:if="${not #lists.isEmpty(season) AND season.getIsSubmissionOpened() == false}" class="table-button sign-up-button">
+                <a th:href="'/signup/' + ${season.id}" class="button-link-more">
+                    <button class="pure-material-button-text" th:text="#{signupButton}"></button>
+                </a>
+            </div>
+        </div>
+
+<!--        <div th:if="${not #lists.isEmpty(season) AND season.getIsSubmissionOpened() == false}" class="button-container">
+            <a href="/signup">
+                <input th:value="#{signupButton}" class="reg-input-button match-all-button" type="button" value=""/>
+            </a>
+        </div>-->
+        <h1 th:text="#{tournamentIsEmpty}" th:if="${#lists.isEmpty(tournament)}" class="empty-text-error"></h1>
+        <h1 th:text="#{seasonIsEmpty}" th:if="${#lists.isEmpty(season)}" class="empty-text-error"></h1>
+        <!--            <div class="main-head-teamlogo">
+                        <div th:each="item : ${teamList}" class="main-head-eachteam">
+                            <a th:attr="href=${'/team/' + item.id}">
+                                <img th:attr="src=${item.logoImageUrl}, class=${'light' + ' ' + 'team' + item.id}">
+                                <img th:attr="src=${item.logoImageUrlDark}, class=${'dark' + ' ' + 'team' + item.id}">
+                            </a>
+                        </div>
+                    </div>-->
+    </div>
+</div>
+<div class="main-head-title mobile-head">
+    <div class="main-head-logo" alt="wiselogo"></div>
+    <h1 th:if="${not #lists.isEmpty(season)} AND ${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${season.nameEn}"></h1>
+    <h1 th:if="${not #lists.isEmpty(season)} AND ${#locale.language == 'uk'}" th:text="${season.name}"></h1>
+    <div class="button-container">
+        <div th:if="${not #lists.isEmpty(season) AND season.getIsSubmissionOpened() == false}" class="table-button sign-up-button">
+            <a href="/signup" class="button-link-more">
+                <button class="pure-material-button-text" th:text="#{signupButton}"></button>
+            </a>
+        </div>
+    </div>
+<!--    <div th:if="${not #lists.isEmpty(season) AND season.getIsSubmissionOpened() == false}" class="button-container">
+        <a href="/signup">
+            <input th:value="#{signupButton}" class="reg-input-button match-all-button" type="button" value=""/>
+        </a>
+    </div>-->
+    <h1 th:text="#{tournamentIsEmpty}" th:if="${#lists.isEmpty(tournament)}" class="empty-text-error"></h1>
+    <h1 th:text="#{seasonIsEmpty}" th:if="${#lists.isEmpty(season)}" class="empty-text-error"></h1>
+</div>
+<div class="main-block">
+    <div th:replace="fragments/carousel :: carousel"></div>
+    <div class="main-text">
+        <div class="main-about">
+            <h1 th:text="#{mainHeaderTitle}"></h1>
+            <p th:text="#{mainDescription}" class="main-description"></p>
+            <div class="main-about-team-match">
+                <div class="main-about-match">
+                    <img src="/img/soccer-ball.png">
+                    <p th:text="#{mainAboutMatch}"></p>
+                </div>
+                <div class="main-about-team">
+                    <img src="/img/team-icon.png">
+                    <p th:text="#{mainAboutTeam}"></p>
+                </div>
+            </div>
+            <!--                <div class="slogan-button">
+                                <input class="main-input-button" type="button" value="Результати" onclick="location.href='/results'">
+                            </div>-->
+        </div>
+        <div class="main-video">
+            <h1 th:text="#{youtubePromo}"></h1>
+            <iframe src="https://www.youtube.com/embed/re-1-nt0tdY" frameborder="0"
+                    allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture"
+                    allowfullscreen>
+            </iframe>
+        </div>
+    </div>
+
+    <div class="main-where-when">
+        <div class="main-where">
+            <h1 th:text="#{venue}"></h1>
+            <p th:text="#{venueData}"></p>
+            <iframe th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3362.3723090122853!2d23.956577636589127!3d49.82196466835055!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x473ae7416a9b3179%3A0x5be70be9b04dfcfe!2z0KTQmiDCq9Cb0YzQstGW0LLCuw!5e0!3m2!1suk!2sua!4v1570803328905!5m2!1sen!2sua"
+                    frameborder="0" style="border:0;" allowfullscreen="">
+            </iframe>
+            <iframe th:if="${#locale.language == 'uk'}" src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3362.3723090122853!2d23.956577636589127!3d49.82196466835055!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x473ae7416a9b3179%3A0x5be70be9b04dfcfe!2z0KTQmiDCq9Cb0YzQstGW0LLCuw!5e0!3m2!1suk!2sua!4v1570803328905!5m2!1suk!2sua"
+                    frameborder="0" style="border:0;" allowfullscreen="">
+            </iframe>
+        </div>
+
+        <div class="main-when">
+            <h1 th:text="#{mainWhen}"></h1>
+            <div class="main-when-gametime">
+                <p th:text="#{mainWhenimeFirst}" class="main-when-time"></p>
+                <p th:text="#{mainWhenimeOr}"></p>
+                <p th:text="#{mainWhenimeSecond}" class="main-when-time"></p>
+            </div>
+            <ul>
+                <li><span th:text="#{mo}"></span></li>
+                <li th:text="#{tu}"></li>
+                <li th:text="#{we}"></li>
+                <li th:text="#{th}"></li>
+                <li th:text="#{fr}"></li>
+                <li th:text="#{sa}"></li>
+                <li th:text="#{su}"></li>
+            </ul>
+            <ul>
+                <li><span th:text="#{mo}"></span></li>
+                <li th:text="#{tu}"></li>
+                <li th:text="#{we}"></li>
+                <li th:text="#{th}"></li>
+                <li th:text="#{fr}"></li>
+                <li th:text="#{sa}"></li>
+                <li th:text="#{su}"></li>
+            </ul>
+            <ul>
+                <li><span th:text="#{mo}"></span></li>
+                <li th:text="#{tu}"></li>
+                <li th:text="#{we}"></li>
+                <li th:text="#{th}"></li>
+                <li th:text="#{fr}"></li>
+                <li th:text="#{sa}"></li>
+                <li th:text="#{su}"></li>
+            </ul>
+            <ul>
+                <li><span th:text="#{mo}"></span></li>
+                <li th:text="#{tu}"></li>
+                <li th:text="#{we}"></li>
+                <li th:text="#{th}"></li>
+                <li th:text="#{fr}"></li>
+                <li th:text="#{sa}"></li>
+                <li th:text="#{su}"></li>
+            </ul>
+            <ul>
+                <li th:text="#{mo}"></li>
+                <li th:text="#{tu}"></li>
+                <li><span th:text="#{we}"></span></li>
+                <li th:text="#{th}"></li>
+                <li th:text="#{fr}"></li>
+                <li th:text="#{sa}"></li>
+                <li th:text="#{su}"></li>
+            </ul>
+            <p th:text="#{venueDescription}"></p>
+        </div>
+    </div>
+    <div class="main-league">
+        <div th:if="${not #lists.isEmpty(leagueList) AND not #lists.isEmpty(season) AND season.getIsSubmissionOpened() == true}" th:each="league : ${leagueList}" class="main-about">
+            <a th:href="'/' + ${season.id} + '/league/' + ${league.id}">
+                <h1 th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${league.nameEn}"></h1>
+                <h1 th:if="${#locale.language == 'uk'}" th:text="${league.name}"></h1>
+            </a>
+            <div class="main-about-league">
+                <div class="main-team-list">
+                    <div th:each="team : ${league.teamList}">
+                        <a th:href="'/' + ${season.id} + '/league/' + ${league.id} + '/team/' + ${team.id}" class="link-style">
+                            <div th:if="${#locale.language == 'uk'}" th:title="${team.teamName}" class="request-block">
+                                <p th:text="${team.teamName}"></p>
+                            </div>
+                            <div th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:title="${team.getTeamNameTransliterated()}" class="request-block">
+                                <p th:text="${team.getTeamNameTransliterated()}"></p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div th:if="${not #lists.isEmpty(cupList) AND not #lists.isEmpty(season) AND season.getIsSubmissionOpened() == true}" th:each="cup : ${cupList}" class="main-about">
+            <a th:href="'/' + ${season.id} + '/cup/' + ${cup.id}">
+                <h1 th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${cup.nameEn}"></h1>
+                <h1 th:if="${#locale.language == 'uk'}" th:text="${cup.name}"></h1>
+            </a>
+            <div class="main-about-league">
+                <div class="main-team-list">
+                    <!--<img src="/img/team-icon.png">-->
+                    <div th:each="team : ${cup.teamList}">
+                        <a th:href="'/' + ${season.id} + '/cup/' + ${cup.id} + '/team/' + ${team.id}" class="link-style">
+                            <div th:if="${#locale.language == 'uk'}" th:title="${team.teamName}" class="request-block">
+                                <p th:text="${team.teamName}"></p>
+                            </div>
+                            <div th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:title="${team.getTeamNameTransliterated()}" class="request-block">
+                                <p th:text="${team.getTeamNameTransliterated()}"></p>
+                            </div>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!--<div class="main-cup">-->
+
+    <!--<div class="main-about instagram-iframe">
+        <a href="https://www.instagram.com/footgo.league" target="_blank">
+            <h1>Instagram</h1>
+        </a>
+        <div class="instagram-widget">
+            <script src="platform.js"></script>
+            <div class="elfsight-app-7577577c-ea5f-42a6-ad8c-5a943c890bcb"></div>
+        </div>
+        <iframe src="https://www.instagram.com/p/B9PdeKFFfSy/embed " width="93%" height="90%" frameborder="0"
+                scrolling="yes" allowtransparency="true"></iframe>
+    </div>-->
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script th:src="@{/hamburger.js}"></script>
+
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-39722519-3"></script>
+<script th:src="@{/imgPlaceholderSetScript.js}" type="text/javascript"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-39722519-3');
+</script>
+
+</body>
+</html>

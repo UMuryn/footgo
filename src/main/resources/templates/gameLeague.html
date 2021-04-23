@@ -1,0 +1,354 @@
+<html>
+<head>
+	<meta charset="UTF-8">
+	<meta name="viewport" content="width=device-width">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+	<script src="https://kit.fontawesome.com/9983a3a0dd.js" crossorigin="anonymous"></script>
+	<title th:text="#{game} + ${' ' + game.firstTeam.teamName + ' vs ' + game.secondTeam.teamName + ' '} + #{tour} + ${' ' + game.tour.tourNumber + ' ' + game.formatDate() + ' | FootGo League'}"></title>
+    <link rel="stylesheet" href="/style.css">
+    <link rel="stylesheet" href="/hamburger.css">
+    <link rel="shortcut icon" href="/img/footgo-dark-icon.png" type="image/x-icon">
+</head>
+<body class="matches-full">
+<header th:replace="fragments/header :: header"></header>
+<div class="main-head main-head-results player-background">
+	<div class="main-head-title league-page">
+		<h1 th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${league.nameEn}"></h1>
+		<h1 th:if="${#locale.language == 'uk'}" th:text="${league.name}"></h1>
+	</div>
+</div>
+<div class="main-block">
+	<div th:replace="fragments/carousel :: carousel"></div>
+</div>
+<div id="bredcrumbs" class="section">
+	<div class="row">
+		<nav>
+			<div class="nav-wrapper">
+				<div class="col">
+					<a th:text="#{home}" href="/" class="breadcrumb"></a>
+					<a th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${league.nameEn}" th:href="'/' + ${seasonId} + '/league/' + ${league.id}" class="breadcrumb"></a>
+					<a th:if="${#locale.language == 'uk'}" th:text="${league.name}" th:href="'/' + ${seasonId} + '/league/' + ${league.id}" class="breadcrumb"></a>
+					<a th:text="#{match}" href="#!" class="breadcrumb"></a>
+				</div>
+			</div>
+		</nav>
+	</div>
+</div>
+<div class="matches-container">
+	<div class="matches-null"></div>
+	<div class="matches-bg">
+		<div class="tour-number">
+			<p><span th:text="#{tour} + ' ' + ${game.tour.tourNumber}"></span></p>
+		</div>
+		<div class="date-time">
+			<p th:text="${game.formatDate()} + ', ' + ${game.formatTime()}"></p>
+		</div>
+		<div class="review-match">
+			<div class="review-head">
+				<div class="review-team1">
+					<a th:attr="href=${'/' + seasonId + '/league/' + leagueId + '/team/' + game.firstTeam.id}">
+						<img th:attr="src=${game.firstTeam.logoImageUrl}, class=${'light' + ' ' + 'team' + game.firstTeam.id}">
+						<img th:attr="src=${game.firstTeam.logoImageUrlDark}, class=${'dark' + ' ' +  'team' + game.firstTeam.id}">
+						<p th:if="${#locale.language == 'uk'}" th:text="${game.firstTeam.teamName}">Team 1</p>
+						<p th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${game.firstTeam.getTeamNameTransliterated()}">Team 1</p>
+					</a>
+				</div>
+				<div th:if="${game.isNoTechnicalDefeat() == true}" th:classappend="${game.formatGoalsForTeamA() == ''}?tbd" class="review-score">
+					<p>
+						<span th:if="${game.isNoTechnicalDefeat() == true}" th:text="${game.formatGoalsForTeamA()}">game.teamAGoals.size()</span>
+						<span th:if="${game.isNoTechnicalDefeat() == true} AND ${game.formatGoalsForTeamA() != ''}">
+						<span th:if="${game.formatPenaltyGoalsForTeamA() != '0'} OR ${game.formatPenaltyGoalsForTeamB() != '0'}"
+							  th:text="${' ' + '(' + game.formatPenaltyGoalsForTeamA() + ')'}"></span>
+						</span>
+					    <span th:if="${game.isNoTechnicalDefeat() == true} and ${game.formatGoalsForTeamA() == ''}">TBD</span>
+						<span th:if="${game.isTeamAHasTechnicalDefeat() == true}">0</span>
+						<span th:if="${game.isTeamBHasTechnicalDefeat() == true}">3</span>
+
+<!--                        <span th:text="${game.teamAGoals.size()}">0</span> -->
+						:
+<!--						<span th:text="${game.teamBGoals.size()}">0</span>-->
+						<span th:if="${game.isNoTechnicalDefeat() == true}" th:text="${game.formatGoalsForTeamB()}">game.teamBGoals.size()</span>
+						<span th:if="${game.isNoTechnicalDefeat() == true} AND ${game.formatGoalsForTeamB() != ''}">
+						<span th:if="${game.formatPenaltyGoalsForTeamB() != '0'} OR ${game.formatPenaltyGoalsForTeamA() != '0'}"
+							  th:text="${' ' + '(' + game.formatPenaltyGoalsForTeamB() + ')'}"></span>
+						</span>
+						<span th:if="${game.isNoTechnicalDefeat() == true} and ${game.formatGoalsForTeamB() == ''}">TBD</span>
+						<span th:if="${game.isTeamAHasTechnicalDefeat() == true}">3</span>
+						<span th:if="${game.isTeamBHasTechnicalDefeat() == true}">0</span>
+                    </p>
+				</div>
+				<div class="review-team2">
+					<a th:attr="href=${'/' + seasonId + '/league/' + leagueId + '/team/' + game.secondTeam.id}">
+						<img th:attr="src=${game.secondTeam.logoImageUrl}, class=${'light' + ' ' + 'team' + game.secondTeam.id}">
+						<img th:attr="src=${game.secondTeam.logoImageUrlDark}, class=${'dark' + ' ' +  'team' + game.secondTeam.id}">
+						<p th:if="${#locale.language == 'uk'}" th:text="${game.secondTeam.teamName}">Team 2</p>
+						<p th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${game.secondTeam.getTeamNameTransliterated()}">Team 2</p>
+					</a>
+				</div>
+			</div>
+		</div>
+		<div th:if="${game.isNoTechnicalDefeat() == true} AND ${!#lists.isEmpty(game.teamAGoals) || !#lists.isEmpty(game.teamBGoals)}" class="tour-number goals">
+			<p th:text="#{goals}"></p>
+		</div>
+		<div class="center-text empty-text-error" th:if="${game.isTeamAHasTechnicalDefeat() == true}">
+			<span th:if="${#locale.language == 'uk'}" th:text="#{teamTechnicalDefeat} + ' ' + ${game.firstTeam.teamName}">Team 1</span>
+			<span th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="#{teamTechnicalDefeat} + ' ' + ${game.firstTeam.getTeamNameTransliterated()}">Team 1</span>
+		</div>
+		<div class="center-text empty-text-error" th:if="${game.isTeamBHasTechnicalDefeat() == true}">
+			<span th:if="${#locale.language == 'uk'}" th:text="#{teamTechnicalDefeat} + ' ' + ${game.secondTeam.teamName}">Team 2</span>
+			<span th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="#{teamTechnicalDefeat} + ' ' + ${game.secondTeam.getTeamNameTransliterated()}">Team 2</span>
+		</div>
+		<div th:if="${game.isNoTechnicalDefeat() == true}" class="details-match">
+			<div class="details-team1">
+				<div class="team1-goals" th:each="goal : ${game.teamAGoals}">
+					<p>
+						<a th:attr="href=${'/' + seasonId + '/league/' + leagueId + '/player/' + goal.player.id}">
+							<span th:if="${#locale.language == 'uk'}" th:text="${goal.player.firstName + ' ' + goal.player.lastName}" class="player-name"></span>
+							<span th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${goal.player.getPlayerFirstNameTransliterated() + ' ' + goal.player.getPlayerLastNameTransliterated()}" class="player-name"></span>
+						</a>
+						<span th:text="${' (' + goal.time + '&lsquo;)'}" class="minute"></span>
+					</p>
+					<img src="/img/soccer-ball.png">
+				</div>
+			</div>
+			<div class="details-team2">
+				<div class="team2-goals" th:each="goal : ${game.teamBGoals}">
+					<img src="/img/soccer-ball.png">
+					<p>
+						<a th:attr="href=${'/' + seasonId + '/league/' + leagueId + '/player/' + goal.player.id}">
+							<span th:if="${#locale.language == 'uk'}" th:text="${goal.player.firstName + ' ' + goal.player.lastName}" class="player-name"></span>
+							<span th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${goal.player.getPlayerFirstNameTransliterated() + ' ' + goal.player.getPlayerLastNameTransliterated()}" class="player-name"></span>
+						</a>
+						<span th:text="${' (' + goal.time + '&lsquo;)'}" class="minute"></span>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div th:if="${game.isNoTechnicalDefeat() == true} AND ${not #lists.isEmpty(game.teamAPenalty)} OR ${not #lists.isEmpty(game.teamBPenalty)}" class="tour-number cards">
+			<p th:text="#{penaltySeries}"></p>
+		</div>
+		<div th:if="${game.isNoTechnicalDefeat() == true}" class="details-match">
+			<div th:if="${game.isNoTechnicalDefeat() == true}" class="details-team1">
+				<div th:if="${not #lists.isEmpty(game.teamAPenalty)}" class="team1-goals" th:each="penalty : ${game.teamAPenalty}">
+					<p>
+						<a th:attr="href=${'/' + seasonId + '/league/' + leagueId + '/player/' + penalty.player.id}">
+							<span th:if="${#locale.language == 'uk'}" th:text="${penalty.player.firstName + ' ' + penalty.player.lastName}" class="player-name"></span>
+							<span th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${penalty.player.getPlayerFirstNameTransliterated() + ' ' + penalty.player.getPlayerLastNameTransliterated()}" class="player-name"></span>
+						</a>
+					</p>
+					<span th:if="${penalty.penaltyGoal == true}" class="fas fa-futbol ball green-ball"></span>
+					<span th:if="${penalty.penaltyGoal == false}" class="fas fa-futbol ball red-ball"></span>
+				</div>
+			</div>
+			<div th:if="${game.isNoTechnicalDefeat() == true}" class="details-team2">
+				<div th:if="${not #lists.isEmpty(game.teamBPenalty)}" class="team2-goals" th:each="penalty : ${game.teamBPenalty}">
+					<span th:if="${penalty.penaltyGoal == true}" class="fas fa-futbol ball green-ball"></span>
+					<span th:if="${penalty.penaltyGoal == false}" class="fas fa-futbol ball red-ball"></span>
+					<p>
+						<a th:attr="href=${'/' + seasonId + '/league/' + leagueId + '/player/' + penalty.player.id}">
+							<span th:if="${#locale.language == 'uk'}" th:text="${penalty.player.firstName + ' ' + penalty.player.lastName}" class="player-name"></span>
+							<span th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${penalty.player.getPlayerFirstNameTransliterated() + ' ' + penalty.player.getPlayerLastNameTransliterated()}" class="player-name"></span>
+						</a>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div th:if="${game.isNoTechnicalDefeat() == true} AND ${not #lists.isEmpty(game.teamACards)} OR ${not #lists.isEmpty(game.teamBCards)}" class="tour-number cards">
+			<p th:text="#{cards}"></p>
+		</div>
+		<div th:if="${game.isNoTechnicalDefeat() == true}" class="details-match">
+			<div th:if="${game.isNoTechnicalDefeat() == true}" class="details-team1">
+				<div th:if="${not #lists.isEmpty(game.teamACards)}" class="team1-goals" th:each="card : ${game.teamACards}">
+					<p>
+						<a th:attr="href=${'/' + seasonId + '/league/' + leagueId + '/player/' + card.player.id}">
+							<span th:if="${#locale.language == 'uk'}" th:text="${card.player.firstName + ' ' + card.player.lastName}" class="player-name"></span>
+							<span th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${card.player.getPlayerFirstNameTransliterated() + ' ' + card.player.getPlayerLastNameTransliterated()}" class="player-name"></span>
+						</a>
+						<span th:text="${' (' + card.time + '&lsquo;)'}" class="minute"></span>
+					</p>
+					<span th:if="${card.isYellow()}" class="yellow-card card-team-one"></span>
+					<span th:if="${card.isRed()}" class="red-card card-team-one"></span>
+				</div>
+			</div>
+			<div th:if="${game.isNoTechnicalDefeat() == true} AND ${not #lists.isEmpty(game.teamBCards)}" class="details-team2">
+				<div class="team2-goals" th:each="card : ${game.teamBCards}">
+					<span th:if="${card.isYellow()}" class="yellow-card card-team-two"></span>
+					<span th:if="${card.isRed()}" class="red-card card-team-two"></span>
+					<p>
+						<a th:attr="href=${'/' + seasonId + '/league/' + leagueId + '/player/' + card.player.id}">
+							<span th:if="${#locale.language == 'uk'}" th:text="${card.player.firstName + ' ' + card.player.lastName}" class="player-name"></span>
+							<span th:if="${#locale.language == 'en' || #locale.language == '' || #locale.language == null}" th:text="${card.player.getPlayerFirstNameTransliterated() + ' ' + card.player.getPlayerLastNameTransliterated()}" class="player-name"></span>
+						</a>
+						<span th:text="${' (' + card.time + '&lsquo;)'}" class="minute"></span>
+					</p>
+				</div>
+			</div>
+		</div>
+		<div th:if="${not #lists.isEmpty(game.teamAStats)} OR ${not #lists.isEmpty(game.teamBStats)}" class="match-statistics">
+			<p th:text="#{matchStatistics}" class="match-statistics-title"></p>
+			<div class="statistics-item">
+				<div class="statistics-item-info">
+					<span th:text="${game.teamAStats?.strikes}" class="item-info-team1"></span>
+					<span th:text="#{strikes}" class="item-info-title"></span>
+					<span th:text="${game.teamBStats?.strikes}" class="item-info-team2"></span>
+				</div>
+				<div class="statistics-item-bar">
+					<div class="progress-wrap item-bar-team1">
+						<div id="strikes-team1-bar"></div>
+					</div>
+					<div class="progress-wrap item-bar-team2">
+						<div id="strikes-team2-bar"></div>
+					</div>
+				</div>
+			</div>
+			<div class="statistics-item">
+				<div class="statistics-item-info">
+					<span th:text="${game.teamAStats?.hitsTheTarget}" class="item-info-team1"></span>
+					<span th:text="#{hitsTheTarget}" class="item-info-title"></span>
+					<span th:text="${game.teamBStats?.hitsTheTarget}" class="item-info-team2"></span>
+				</div>
+				<div class="statistics-item-bar">
+					<div class="progress-wrap item-bar-team1">
+						<div id="hits-the-target-team1-bar"></div>
+					</div>
+					<div class="progress-wrap item-bar-team2">
+						<div id="hits-the-target-team2-bar"></div>
+					</div>
+				</div>
+			</div>
+			<div class="statistics-item">
+				<div class="statistics-item-info">
+					<span th:text="${game.teamAStats?.strikesPastTheGate}" class="item-info-team1"></span>
+					<span th:text="#{strikesPastTheGate}" class="item-info-title"></span>
+					<span th:text="${game.teamBStats?.strikesPastTheGate}" class="item-info-team2"></span>
+				</div>
+				<div class="statistics-item-bar">
+					<div class="progress-wrap item-bar-team1">
+						<div id="strikes-past-the-gate-team1-bar"></div>
+					</div>
+					<div class="progress-wrap item-bar-team2">
+						<div id="strikes-past-the-gate-team2-bar"></div>
+					</div>
+				</div>
+			</div>
+			<div class="statistics-item">
+				<div class="statistics-item-info">
+					<span th:text="${game.teamAStats?.freeKicks}" class="item-info-team1"></span>
+					<span th:text="#{freeKicks}" class="item-info-title"></span>
+					<span th:text="${game.teamBStats?.freeKicks}" class="item-info-team2"></span>
+				</div>
+				<div class="statistics-item-bar">
+					<div class="progress-wrap item-bar-team1">
+						<div id="free-kicks-team1-bar"></div>
+					</div>
+					<div class="progress-wrap item-bar-team2">
+						<div id="free-kicks-team2-bar"></div>
+					</div>
+				</div>
+			</div>
+			<div class="statistics-item">
+				<div class="statistics-item-info">
+					<span th:text="${game.teamAStats?.fouls}" class="item-info-team1"></span>
+					<span th:text="#{fouls}" class="item-info-title"></span>
+					<span th:text="${game.teamBStats?.fouls}" class="item-info-team2"></span>
+				</div>
+				<div class="statistics-item-bar">
+					<div class="progress-wrap item-bar-team1">
+						<div id="fouls-team1-bar"></div>
+					</div>
+					<div class="progress-wrap item-bar-team2">
+						<div id="fouls-team2-bar"></div>
+					</div>
+				</div>
+			</div>
+			<div class="statistics-item">
+				<div class="statistics-item-info">
+					<span th:text="${game.teamAStats?.cornerKicks}" class="item-info-team1"></span>
+					<span th:text="#{cornerKicks}" class="item-info-title"></span>
+					<span th:text="${game.teamBStats?.cornerKicks}" class="item-info-team2"></span>
+				</div>
+				<div class="statistics-item-bar">
+					<div class="progress-wrap item-bar-team1">
+						<div id="corner-kicks-team1-bar"></div>
+					</div>
+					<div class="progress-wrap item-bar-team2">
+						<div id="corner-kicks-team2-bar"></div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div class="match-video" th:if="${!#strings.isEmpty(game.videoUrl)}">
+			<p th:text="#{matchVideo}"></p>
+			<iframe width="700" height="381" th:attr="src=${game.videoUrl}" frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+		</div>
+		<div class="match-video video-description" th:if="${game.descriptionText != null} AND ${game.descriptionText != ''} AND ${game.descriptionText != ' '}">
+			<p class="match-statistics-title" th:text="#{matchDescription}"></p>
+			<div class="results-container description-text">
+				<div th:utext="${game.descriptionText}">
+					game.firstTeam.teamName
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+<div th:replace="fragments/footer :: footer"></div>
+
+<script src="/signUpScript.js"></script>
+<script src="/hamburger.js"></script>
+<!-- Global site tag (gtag.js) - Google Analytics -->
+<script async src="https://www.googletagmanager.com/gtag/js?id=UA-39722519-3"></script>
+<script src="/imgPlaceholderSetScript.js" type="text/javascript"></script>
+<script>
+  window.dataLayer = window.dataLayer || [];
+  function gtag(){dataLayer.push(arguments);}
+  gtag('js', new Date());
+
+  gtag('config', 'UA-39722519-3');
+</script>
+<script src="/matchStatistics.js" type="text/javascript"></script>
+<script th:inline="javascript">
+const strikesTeamA = document.querySelector("#strikes-team1-bar");
+const strikesTeamB = document.querySelector("#strikes-team2-bar");
+
+const strikesForTeamA = percentageForTeamA([[${game.teamAStats?.strikes}]], [[${game.teamBStats?.strikes}]]);
+const strikesForTeamB = percentageForTeamB([[${game.teamAStats?.strikes}]], [[${game.teamBStats?.strikes}]]);
+calculatePercentage(strikesForTeamA, strikesForTeamB, strikesTeamA, strikesTeamB);
+
+const hitsTheTargetTeamA = document.querySelector("#hits-the-target-team1-bar");
+const hitsTheTargetTeamB = document.querySelector("#hits-the-target-team2-bar");
+
+const hitsTheTargetForTeamA = percentageForTeamA([[${game.teamAStats?.hitsTheTarget}]], [[${game.teamBStats?.hitsTheTarget}]]);
+const hitsTheTargetForTeamB = percentageForTeamB([[${game.teamAStats?.hitsTheTarget}]], [[${game.teamBStats?.hitsTheTarget}]]);
+calculatePercentage(hitsTheTargetForTeamA, hitsTheTargetForTeamB, hitsTheTargetTeamA, hitsTheTargetTeamB);
+
+const strikesPastTheGateTeamA = document.querySelector("#strikes-past-the-gate-team1-bar");
+const strikesPastTheGateTeamB = document.querySelector("#strikes-past-the-gate-team2-bar");
+
+const strikesPastTheGateForTeamA = percentageForTeamA([[${game.teamAStats?.strikesPastTheGate}]], [[${game.teamBStats?.strikesPastTheGate}]]);
+const strikesPastTheGateForTeamB = percentageForTeamB([[${game.teamAStats?.strikesPastTheGate}]], [[${game.teamBStats?.strikesPastTheGate}]]);
+calculatePercentage(strikesPastTheGateForTeamA, strikesPastTheGateForTeamB, strikesPastTheGateTeamA, strikesPastTheGateTeamB);
+
+const freeKicksTeamA = document.querySelector("#free-kicks-team1-bar");
+const freeKicksTeamB = document.querySelector("#free-kicks-team2-bar");
+
+const freeKicksForTeamA = percentageForTeamA([[${game.teamAStats?.freeKicks}]], [[${game.teamBStats?.freeKicks}]]);
+const freeKicksForTeamB = percentageForTeamB([[${game.teamAStats?.freeKicks}]], [[${game.teamBStats?.freeKicks}]]);
+calculatePercentage(freeKicksForTeamA, freeKicksForTeamB, freeKicksTeamA, freeKicksTeamB);
+
+const foulsTeamA = document.querySelector("#fouls-team1-bar");
+const foulsTeamB = document.querySelector("#fouls-team2-bar");
+
+const foulsForTeamA = percentageForTeamA([[${game.teamAStats?.fouls}]], [[${game.teamBStats?.fouls}]]);
+const foulsForTeamB = percentageForTeamB([[${game.teamAStats?.fouls}]], [[${game.teamBStats?.fouls}]]);
+calculatePercentage(foulsForTeamA, foulsForTeamB, foulsTeamA, foulsTeamB);
+
+const cornerKicksTeamA = document.querySelector("#corner-kicks-team1-bar");
+const cornerKicksTeamB = document.querySelector("#corner-kicks-team2-bar");
+
+const cornerKicksForTeamA = percentageForTeamA([[${game.teamAStats?.cornerKicks}]], [[${game.teamBStats?.cornerKicks}]]);
+const cornerKicksForTeamB = percentageForTeamB([[${game.teamAStats?.cornerKicks}]], [[${game.teamBStats?.cornerKicks}]]);
+calculatePercentage(cornerKicksForTeamA, cornerKicksForTeamB, cornerKicksTeamA, cornerKicksTeamB);
+</script>
+</body>
+</html>

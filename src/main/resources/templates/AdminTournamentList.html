@@ -1,0 +1,46 @@
+<html>
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1"/>
+    <title>Admin | FootGo League</title>
+    <link rel="stylesheet" href="../../../admin.css">
+    <link rel="shortcut icon" href="/img/footgo-dark-icon.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+</head>
+<body>
+    <p th:text="${#authentication.principal.username}"></p>
+    <form id="logoutForm" th:action="@{/logout}" method="POST">
+<!--        <input value="Logout" type="submit">-->
+    </form>
+    <a href="#" onclick="document.forms['logoutForm'].submit()">Вийти | </a>
+    <a th:href="@{/}">На головну</a>
+
+    <div class="main-container">
+        <div class="admin-main">
+            <div class="admin-logo">
+                <a href="/admin"><img class="admin-img" src="/img/footgo-dark-icon.png" alt="logo"></a>
+            </div>
+        </div>
+        <div class="requests">
+            <p>Турніри</p>
+            <div class="season-block all-requests">
+                <div>
+                    <a class="link-style" href="/admin/tournaments/new">
+                        <div class="request-block add-season" title="Створити новий турнір">
+                            <i class="fa fa-plus"></i>
+                        </div>
+                    </a>
+                </div>
+                <div th:each="tournament : ${tournamentList}">
+                    <a th:href="'/admin/tournament/' + ${tournament.id}" class="link-style">
+                        <div class="request-block">
+                            <h3 th:text="${tournament.name}"></h3>
+                        </div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</body>
+</html>
