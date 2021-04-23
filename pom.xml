@@ -205,6 +205,13 @@
 						</configuration>
 					</execution>
 				</executions>
+				
+				
+	<configuration>
+  <argLine>-Xmx1024m</argLine>
+</configuration>
+				
+				
 				<configuration>
 					<executable>true</executable>
 					<addResources>true</addResources>
